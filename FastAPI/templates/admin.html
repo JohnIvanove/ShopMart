@@ -1,0 +1,11 @@
+{% extends "shablon.html" %}
+
+{% block title %}ShopMart - Admin{% endblock %}
+
+{% block content %}
+<div class="bg-gray-900/50 backdrop-filter backdrop-blur-md text-gray-300 m-5 top-4 rounded-full sticky z-10">
+<!-- Навігація -->
+  <div id="sidebar-container" hx-get="/admin/sidebar" hx-swap="outerHTML" hx-trigger="load"></div>
+</div>
+<div id="admin-container" class="w-full mx-auto p-8" hx-get="/admin/dashboard" hx-target="#admin-container" hx-swap="innerHTML" hx-trigger="load"></div>
+{% endblock %}

@@ -1,0 +1,149 @@
+{% extends "shablon.html" %}
+
+{% block title %}ShopMart - Product Detail{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+  <!-- Back -->
+  <button
+    onclick="history.back()"
+    class="flex items-center text-gray-600 hover:text-blue-600 mb-6"
+  >
+    <i class="fa-solid fa-arrow-left text-md mr-1"></i>
+    Back
+  </button>
+
+  <!-- Product Detail -->
+  <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 p-6">
+
+      <!-- Image -->
+      <div class="bg-gray-100 rounded-lg overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Some"
+             class="w-full h-auto object-contain aspect-square"/>
+      </div>
+
+      <!-- Info -->
+      <div class="space-y-6">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900">Some</h1>
+          <p class="text-gray-500 mt-1">Electronics</p>
+        </div>
+
+        <!-- Rating -->
+        <div class="flex items-center">
+          <div class="flex">
+            {% for i in range(5) %}
+              <!-- <svg class="w-5 h-5 {% if i < 4 %}text-yellow-400{% else %}text-gray-300{% endif %}"
+                   fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9.049 2.927c..."/>
+              </svg> -->
+              <i class="fa-solid fa-star {% if i < 4 %}text-yellow-400{% else %}text-gray-300{% endif %}"></i>
+            {% endfor %}
+          </div>
+          <span class="ml-2 text-gray-600">(24 reviews)</span>
+        </div>
+
+        <!-- Price -->
+        <div>
+          <h2 class="text-3xl font-bold text-gray-900">$400</h2>
+          <p class="mt-1 text-sm text-gray-500">Tax included. Shipping calculated at checkout.</p>
+        </div>
+
+        <!-- Description -->
+        <div>
+          <h3 class="text-sm font-medium text-gray-900">Description</h3>
+          <p class="mt-2 text-gray-600">No description</p>
+        </div>
+
+        <!-- Quantity -->
+        <div class="space-y-4">
+          <div class="flex justify-between items-center">
+            <h3 class="text-sm font-medium text-gray-900">Quantity</h3>
+            <span class="text-sm {% if 8 <= 5 %}text-orange-600{% else %}text-green-600{% endif %}">
+                8 in stock
+            </span>
+          </div>
+          <div class="flex items-center">
+            <button
+              onclick="document.getElementById('qty').stepDown()"
+              class="px-3 py-1 border border-gray-300 rounded-l-md bg-gray-50 text-gray-600 hover:bg-gray-100 disabled:opacity-50"
+              {% if 3 < 1 %}disabled{% endif %}
+            >-</button>
+            <input id="qty" name="quantity" type="number" min="1" max="8"
+                   value="1" class="w-14 text-center border-t border-b border-gray-300 py-1"
+                   {% if 3 < 1 %}disabled{% endif %}/>
+            <button
+              onclick="document.getElementById('qty').stepUp()"
+              class="px-3 py-1 border border-gray-300 rounded-r-md bg-gray-50 text-gray-600 hover:bg-gray-100 disabled:opacity-50"
+              {% if 3 < 1 %}disabled{% endif %}
+            >+</button>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="space-y-3">
+          <form hx-post="/cart/items" hx-include="#qty" hx-vals='{"id":1}' hx-swap="none">
+            <button type="submit"
+              class="w-full flex items-center justify-center py-3 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
+              {% if 3 < 1 %}disabled{% endif %}>
+              <i class="fa-solid fa-cart-plus text-s mr-2"></i>
+              Add to Cart
+            </button>
+          </form>
+          <form hx-post="/wishlist/items" hx-vals='{"id":1}' hx-swap="none">
+            <button type="submit"
+              class="w-full flex items-center justify-center py-3 px-4 border border-gray-300 rounded-md bg-white text-gray-700 hover:bg-gray-50">
+              {% if 2==2 %}
+                <i class="fa-solid fa-heart-circle-plus text-blue-700 mr-2"></i>
+                Add to Wishlist
+            {% else %}
+                <i class="fa-solid fa-heart-circle-check text-pink-700 mr-2"></i>
+                Added to Wishlist
+            {% endif %}
+            </button>
+          </form>
+        </div>
+
+        <!-- Guarantees -->
+        <div class="mt-8 border-t border-gray-200 pt-6 space-y-4">
+          <div class="flex items-start">
+            <i class="fa-solid fa-truck text-gray-400 mr-2 mt-2"></i>
+            <div>
+              <h4 class="text-sm font-medium text-gray-900">Free shipping</h4>
+              <p class="mt-1 text-sm text-gray-500">On orders over $50</p>
+            </div>
+          </div>
+          <div class="flex items-start">
+            <i class="fa-solid fa-shield text-gray-400 mr-2 mt-2"></i>
+            <div>
+              <h4 class="text-sm font-medium text-gray-900">30-day returns</h4>
+              <p class="mt-1 text-sm text-gray-500">Satisfaction guaranteed</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Related Products -->
+  {% if relatedProducts %}
+    <div class="mt-16">
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">You may also like</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {% for p in relatedProducts %}
+          <a href="/products/1" class="group bg-white rounded-lg shadow-sm overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Some" class="w-full h-48 object-cover group-hover:scale-105 transition-transform"/>
+            <div class="p-4">
+              <h3 class="text-md font-medium text-gray-900">Some</h3>
+              <p class="mt-1 text-gray-500">$400</p>
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+
+</div>
+{% endblock %}

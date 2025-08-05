@@ -1,0 +1,70 @@
+<!-- Навігація -->
+<nav>
+  <div class="hidden md:flex flex-row flex justify-center p-2 gap-8 overflow-x-auto">
+    {% for item in links %}
+      <a
+        hx-get="{{ item.href }}" hx-swap="innerHTML" hx-target="#admin-container" hx-trigger="click"
+        class="group cursor-pointer flex items-center px-2 py-2 text-sm font-medium rounded-md
+               {{ 'bg-gray-900/50 backdrop-filter backdrop-blur-md text-white' if request.url.path == item.href else
+                  'hover:bg-gray-600/5 hover:backdrop-blur-md hover:text-white' }}"
+      >
+        <i class="fa-solid fa-{{ item.icon }} mr-3 w-5"></i>
+        {{ item.name }}
+      </a>  
+    {% endfor %}
+    <a
+      href="/"
+      class="group flex items-center px-2 py-2 text-sm font-medium rounded-md
+            hover:bg-gray-600/5 hover:backdrop-blur-md hover:text-white"
+    >
+      <i class="fa-solid fa-arrow-left mr-2 w-5"></i>
+      Back to Store
+    </a>
+  </div>
+  <div class="bg-gray-900/5 backdrop-filter backdrop-blur-md rounded-full md:hidden flex justify-center items-center z-20">
+    <button id="mobile-menu-button" class="w-full rounded-full hover:text-gray-500 transform transition duration-200 hover:scale-110 focus:#mobile-menu.md:show" onclick="document.getElementById('mobile-menu-admin').classList.toggle('hidden')">
+        <i class="fa-solid fa-bars text-xl"></i>
+    </button>
+    <div id="mobile-menu-admin" class="hidden absolute top-12 center w-auto bg-gray-900/50 backdrop-filter backdrop-blur-md shadow-lg z-10 rounded-lg">
+      {% for item in links %}
+        <a
+          hxget="{{ item.href }}" hx-swap="outerHTML" hx-target="#admin-container" hx-trigger="click"
+          class="block px-3 py-1 rounded-md text-base font-medium text-gray-300 hover:text-blue-600 hover:transition duration-200"
+        >
+          <i class="fa-solid fa-{{ item.icon }} mr-2 w-5"></i>
+          {{ item.name }}
+        </a>
+      {% endfor %}
+      <a href="/"
+         class="block px-3 py-1 rounded-md text-base font-medium text-gray-300 hover:text-blue-600">
+        <i class="fa-solid fa-arrow-left mr-2 w-5"></i>
+        Back to Store
+      </a>
+    </div>
+  </div>
+
+</nav>
+
+<!--
+<div class="w-64 bg-gray-800 text-gray-300 m-5 top-4 rounded-md sticky z-10">
+  <div class="flex items-center justify-between h-16 px-4 bg-gray-900 rounded-t-md">
+    <span class="text-white font-bold">ShopMart Admin</span>
+    <button
+      class="text-gray-500">
+      <i class="fa-solid fa-right"></i>
+    </button>
+  </div>
+  <div id="sidebar-container" hx-get="/admin/sidebar" hx-swap="outerHTML" hx-trigger="load"></div>
+  <div class="px-2 py-4 border-t border-gray-700">
+      <a
+        href="/"
+        class="group flex items-center px-2 py-2 text-sm font-medium rounded-md
+              hover:bg-gray-700 hover:text-white"
+      >
+        <i class="fa-solid fa-arrow-left mr-3 w-5"></i>
+        Back to Store
+      </a>
+    </div>
+  </div>
+</div>
+-->

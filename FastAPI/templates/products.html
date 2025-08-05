@@ -1,0 +1,172 @@
+{% extends "shablon.html" %}
+
+{% block title %}ShopMart — Products{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <h1 id="category-text" hx-swap-oob="true" class="mb-3 ml-4 text-2xl font-bold">{{ filters.category if filters.category else 'All Categories' }}</h1>
+  <div class="flex flex-col md:flex-row gap-8">
+
+    <!-- Mobile filter toggle -->
+    <button
+      class="md:hidden flex items-center justify-center py-2 px-4 border border-gray-300 rounded-md bg-white text-gray-700 hover:bg-gray-50"
+      onclick="document.getElementById('filters-panel').classList.toggle('hidden')"
+      hx-get="/toggle-filter-label"
+      hx-target="#SHFilters"
+      hx-trigger="click"
+      hx-swap="outerText"
+    >
+      <i class="fa-solid fa-filter mr-2"></i>
+      <span id="SHFilters">Filters</span>
+    </button>
+
+    <!-- Filters panel -->
+    <div id="filters-panel" class="hidden md:block md:w-64">
+      <form
+        id="filters-form"
+        hx-get="/products"
+        hx-trigger="submit"
+        hx-target="#products-grid"
+        hx-push-url="true"
+        class="bg-white p-4 rounded-lg shadow sticky top-4 space-y-6"
+      >
+        <div class="flex justify-between items-center">
+          <h2 class="text-lg font-medium text-gray-900">Filters</h2>
+          <button
+            type="button"
+            hx-get="/products"
+            hx-trigger="click"
+            hx-target="#products-grid"
+            hx-push-url="true"
+            class="text-sm text-blue-600 hover:text-blue-800"
+          >
+            Clear All
+          </button>
+        </div>
+
+
+        <!-- Category -->
+        <div>
+          <h3 class="text-sm font-medium text-gray-900 mb-2">Category</h3>
+          <div class="space-y-2">
+            <div class="flex items-center">
+              <input
+                id="category-all"
+                name="category"
+                type="radio"
+                value=""
+                checked
+                {% if filters.category == '' %}checked{% endif %}
+                class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+              />
+              <label for="category-all" class="ml-2 text-sm text-gray-700">
+                All Categories
+              </label>
+            </div>
+            {% for category in categories %}
+            <div class="flex items-center">
+              <input
+                id="category-{{ category }}"
+                name="category"
+                type="radio"
+                value="{{ category }}"
+                {% if filters.category == category %}checked{% endif %}
+                class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+              />
+              <label for="category-{{ category }}" class="ml-2 text-sm text-gray-700">
+                {{ category }}
+              </label>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Price Range -->
+        <div>
+          <h3 class="text-sm font-medium text-gray-900 mb-2">Price Range</h3>
+          <div class="flex items-center space-x-2">
+            <input
+              type="number"
+              name="minPrice"
+              placeholder="Min"
+              min="0"
+              max="10000"
+              value="{{ filters.minPrice }}"
+              class="w-full px-2 py-1 text-sm border border-gray-300 rounded-md"
+            />
+            <span class="text-gray-500">to</span>
+            <input
+              type="number"
+              name="maxPrice"
+              placeholder="Max"
+              min="0"
+              max="10000"
+              value="{{ filters.maxPrice }}"
+              class="w-full px-2 py-1 text-sm border border-gray-300 rounded-md"
+            />
+          </div>
+        </div>
+
+        <!-- Search -->
+        <div>
+          <h3 class="text-sm font-medium text-gray-900 mb-2">Search</h3>
+          <input
+            type="text"
+            name="search"
+            placeholder="Search products..."
+            value="{{ filters.search }}"
+            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md"
+          />
+        </div>
+
+        <!-- Apply Filters -->
+        <button
+          type="submit"
+          class="w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+        >
+          Apply Filters
+        </button>
+      </form>
+    </div>
+
+    <!-- Products grid -->
+    <div id="products-grid" class="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% if products %}
+        {% for product in products %}
+        <div
+          class="bg-white p-4 rounded-lg shadow hover:shadow-lg transition-shadow cursor-pointer"
+          onclick="window.location.href='/products/{{ product.id }}'"
+        >
+          <img
+            src="{{ product.image_url or 'https://via.placeholder.com/150' }}"
+            alt="{{ product.name }}"
+            class="w-full h-48 object-cover rounded"
+          />
+          <h4 class="mt-2 text-lg font-semibold">{{ product.name }}</h4>
+          <p class="text-gray-500">{{ product.category }}</p>
+          <div class="flex items-center justify-between mt-4">
+            <p class="text-lg font-bold">${{ product.price }}</p>
+            <button
+              onclick="event.stopPropagation(); addToCart({{ product.id }});"
+              class="px-2 py-1 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors"
+            >
+              <i class="fa-solid fa-cart-plus"></i>
+            </button>
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="col-span-full text-center text-gray-500">
+          <p><i class="fa-solid fa-circle-exclamation text-md mr-2"></i>No products in base.</p>
+          <!-- <button
+            onclick="window.location.href='/products'"
+            class="w-64 py-2 mt-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+          >
+            Go shopping
+          </button> -->
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

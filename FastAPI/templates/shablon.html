@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="/static/favicon_io/favicon-32x32.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"> -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body class="w-full bg-gray-100">
+    <header class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+
+            <!-- Logo + Desktop Nav -->
+            <div class="flex items-center">
+            <a href="/" class="flex-shrink-0 flex items-center">
+                <span class="text-xl font-bold text-blue-600">ShopMart</span>
+            </a>
+            <nav class="hidden md:ml-8 md:flex md:space-x-8">
+                <a href="/" class="text-gray-700 hover:text-blue-600 px-3 py-2 font-medium">Home</a>
+                <a href="/products" class="text-gray-700 hover:text-blue-600 px-3 py-2 font-medium">Products</a>
+            </nav>
+            </div>
+
+            <!-- Desktop Actions -->
+            <div class="hidden md:flex items-center">
+
+            <!-- Cart Count (HTMX load) -->
+            <a href="/cart" class="ml-4 relative">
+                <!-- Cart Icon -->
+                <i class="fa-solid fa-cart-shopping text-s text-gray-700 hover:text-blue-600"></i>
+                <span class="absolute -top-2 -right-2 bg-blue-600 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center"
+                >1</span>
+            </a>
+            {% if current_user %}
+                <!-- Користувач залогінений: покажемо Profile або Logout -->
+                <a class="cursor-pointer ml-4 text-gray-700 hover:text-blue-600">
+                    <i class="fa-regular fa-user text-lg" onclick="document.getElementById('account-menu').classList.toggle('hidden')"></i>
+                    <div id="account-menu" class="hidden absolute pb-2 mt-3 right-25 top-10 w-auto bg-gray-50 rounded-lg shadow-lg z-20">
+                        <a href="/account" class="block px-6 pb-1 text-sm text-gray-700 hover:text-blue-600 hover:bg-gray-100">Profile</a>
+                        <a href="/account/logout" class="block px-6 mb-3 text-sm text-gray-700 hover:text-blue-600 hover:bg-gray-100">Logout</a>
+                    </div>
+                </a>
+            {% else %}
+                <!-- Гість: показуємо Login -->
+                <a href="/account/login"
+                    class="ml-4 text-gray-700 hover:text-blue-600">
+                    Login
+                </a>
+            {% endif %}
+            </div>
+
+        <!-- Mobile Menu -->
+        <div class="md:hidden flex items-center z-20">
+            <button id="mobile-menu-button" class="text-gray-700 hover:text-blue-600 focus:#mobile-menu.md:show hover:transition duration-200" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+                <i class="fa-solid fa-bars text-xl"></i>
+            </button>
+            <div id="mobile-menu" class="hidden absolute top-12 right-2 w-auto bg-gray-50 shadow-lg z-10 rounded-lg">
+                <div class="px-2 pt-2 pb-3">
+                    <a href="/" class="block px-3 py-1 rounded-md text-base font-medium text-gray-700 hover:text-blue-600">Home</a>
+                    <a href="/products" class="block px-3 py-1 rounded-md text-base font-medium text-gray-700 hover:text-blue-600">Products</a>
+                    <a href="/cart" class="ml-4 relative">
+                        <!-- Cart Icon -->
+                        <i class="fa-solid fa-cart-shopping text-s text-gray-700 hover:text-blue-600"></i>
+                        <span class="absolute -top-2 -right-2 bg-blue-600 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center"
+                        >1</span>
+                    </a>
+                    {% if current_user %}
+                        <!-- Користувач залогінений: покажемо Profile або Logout -->
+                        <a href="/account"
+                            class="ml-4 text-gray-700 hover:text-blue-600">
+                            <i class="fa-regular fa-user text-lg"></i>
+                        </a>
+                    {% else %}
+                        <!-- Гість: показуємо Login -->
+                        <a href="/account/login"
+                            class="ml-4 text-gray-700 hover:text-blue-600">
+                            Login
+                        </a>
+                    {% endif %}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    {% block content %}
+    {% endblock %}
+    <footer class="bg-gray-800 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+
+            <!-- Brand & Social -->
+            <div>
+                <h3 class="text-xl font-bold mb-4">ShopMart</h3>
+                <p class="text-gray-300 mb-4">
+                Your one-stop shop for all your shopping needs. Quality products at affordable prices.
+                </p>
+                <div class="flex space-x-4">
+                <a href="#" class="text-gray-300 hover:text-white">
+                    <i class="fab fa-facebook-f fa-lg"></i>
+                </a>
+                <a href="#" class="text-gray-300 hover:text-white">
+                    <i class="fab fa-twitter fa-lg"></i>
+                </a>
+                <a href="#" class="text-gray-300 hover:text-white">
+                    <i class="fa-brands fa-youtube fa-xl"></i>
+                </a>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div>
+                <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                <ul class="space-y-2">
+                <li><a href="/" class="text-gray-300 hover:text-white">Home</a></li>
+                <li><a href="/products" class="text-gray-300 hover:text-white">Products</a></li>
+                <li><a href="/cart" class="text-gray-300 hover:text-white">Cart</a></li>
+                <li><a href="/account" class="text-gray-300 hover:text-white">Account</a></li>
+                </ul>
+            </div>
+
+            <!-- Categories -->
+            <div>
+                <h3 class="text-lg font-semibold mb-4">Categories</h3>
+                <ul class="space-y-2">
+                <li><a href="/products?category=electronics" class="text-gray-300 hover:text-white">Electronics</a></li>
+                <li><a href="/products?category=clothing" class="text-gray-300 hover:text-white">Clothing</a></li>
+                <li><a href="/products?category=home" class="text-gray-300 hover:text-white">Home & Kitchen</a></li>
+                <li><a href="/products?category=beauty" class="text-gray-300 hover:text-white">Beauty & Personal Care</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact Us -->
+            <div>
+                <h3 class="text-lg font-semibold mb-4">Contact Us</h3>
+                <ul class="space-y-2">
+                <li class="flex items-start">
+                    <i class="fas fa-map-marker-alt fa-lg mr-2 mt-3"></i>
+                    <span class="text-gray-300">123 Shopping Street, Retail City, RC 12345</span>
+                </li>
+                <li class="flex items-center">
+                    <i class="fas fa-phone fa-lg mr-2"></i>
+                    <span class="text-gray-300">(123) 456-7890</span>
+                </li>
+                <li class="flex items-center">
+                    <i class="fas fa-envelope fa-lg mr-2"></i>
+                    <span class="text-gray-300">info@shopmart.com</span>
+                </li>
+                </ul>
+            </div>
+
+            </div>
+
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-300">
+            <p>&copy; <span id="year"></span> ShopMart. All rights reserved.</p>
+            </div>
+        </div>
+        </footer>
+
+        <!-- Додайте перед </body> -->
+        <script>
+        document.getElementById('year').textContent = new Date().getFullYear()
+        </script>
+
+</body>
+</html>
